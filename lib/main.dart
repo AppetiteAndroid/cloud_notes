@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'core/constants.dart';
 import 'injector.dart' as di;
 
 void main() async {
@@ -18,6 +19,10 @@ void main() async {
     ..registerAdapter(AccountsEnumAdapter())
     ..registerAdapter(AccountsAdapter());
   di.init();
+  await Hive.openBox<Accounts>(Constants.accounts);
+  await Hive.openBox<AccountsCategoryModel>(Constants.paymentTypes);
+  await Hive.openBox<AccountsCategoryModel>(Constants.categoriesExpenses);
+  await Hive.openBox<AccountsCategoryModel>(Constants.categoriesIncomes);
   runApp(const MyApp());
 }
 

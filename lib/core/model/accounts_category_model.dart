@@ -7,29 +7,29 @@ part 'accounts_category_model.g.dart';
 @HiveType(typeId: 1)
 class AccountsCategoryModel extends Equatable {
   @HiveField(0)
-  final int id;
-  @HiveField(1)
   final String title;
-  @HiveField(2)
+  @HiveField(1)
   final String? path;
+  @HiveField(2)
+  final bool isDefault;
   const AccountsCategoryModel({
-    required this.id,
     required this.title,
     this.path,
+    this.isDefault = false,
   });
 
   @override
-  List<Object?> get props => [id, title, path];
+  List<Object?> get props => [title, path, isDefault];
 
   AccountsCategoryModel copyWith({
-    int? id,
     String? title,
     String? path,
+    bool? isDefault,
   }) {
     return AccountsCategoryModel(
-      id: id ?? this.id,
       title: title ?? this.title,
       path: path ?? this.path,
+      isDefault: isDefault ?? this.isDefault,
     );
   }
 }

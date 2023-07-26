@@ -17,9 +17,9 @@ class AccountsCategoryModelAdapter extends TypeAdapter<AccountsCategoryModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AccountsCategoryModel(
-      id: fields[0] as int,
-      title: fields[1] as String,
-      path: fields[2] as String?,
+      title: fields[0] as String,
+      path: fields[1] as String?,
+      isDefault: fields[2] as bool,
     );
   }
 
@@ -28,11 +28,11 @@ class AccountsCategoryModelAdapter extends TypeAdapter<AccountsCategoryModel> {
     writer
       ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.id)
-      ..writeByte(1)
       ..write(obj.title)
+      ..writeByte(1)
+      ..write(obj.path)
       ..writeByte(2)
-      ..write(obj.path);
+      ..write(obj.isDefault);
   }
 
   @override

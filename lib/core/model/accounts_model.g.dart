@@ -17,12 +17,12 @@ class AccountsAdapter extends TypeAdapter<Accounts> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Accounts(
-      fields[0] as double,
-      fields[1] as AccountsCategoryModel,
-      fields[2] as AccountsCategoryModel,
-      fields[3] as String?,
-      fields[4] as DateTime,
-      fields[5] as AccountsEnum,
+      sum: fields[0] as double,
+      accountsType: fields[5] as AccountsEnum,
+      category: fields[1] as AccountsCategoryModel?,
+      payType: fields[2] as AccountsCategoryModel?,
+      note: fields[3] as String?,
+      date: fields[4] as DateTime?,
     );
   }
 
