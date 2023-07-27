@@ -51,3 +51,9 @@ class ChangeDefaultPayType extends HomeEvent {
 
   const ChangeDefaultPayType(this.index);
 }
+
+class DeleteAccount extends HomeEvent {
+  final Accounts accounts;
+
+  const DeleteAccount(this.accounts);
+}

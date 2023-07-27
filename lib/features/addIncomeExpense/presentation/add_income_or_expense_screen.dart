@@ -90,7 +90,9 @@ class _AddIncomeExpenseScreenState extends State<AddIncomeExpenseScreen> {
           title: Text(widget.accountsEnum == AccountsEnum.income ? "Income" : "Expense"),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
           ),
         ),
         body: SingleChildScrollView(

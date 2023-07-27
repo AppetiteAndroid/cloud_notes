@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'home_bloc.dart';
 
-enum Filter { all, byCategory, byPayType }
+enum Filter { all, byCategory, byPayType, byDate }
 
 class HomeState extends Equatable {
   final List<Accounts> accounts;
@@ -44,6 +44,9 @@ class HomeState extends Equatable {
         break;
       case Filter.byPayType:
         groupedMap = groupBy(list, (p0) => p0.payType?.title);
+        break;
+      case Filter.byDate:
+        groupedMap = groupBy(list, (p0) => DateFormat("dd/MM/y").format(p0.date!));
         break;
     }
     groupedMap.forEach((key, value) {

@@ -28,6 +28,20 @@ class CategoriesBottomSheet extends StatefulWidget {
 class _CategoriesBottomSheetState extends State<CategoriesBottomSheet> {
   String _title = "";
 
+  late Box box;
+
+  @override
+  void initState() {
+    box = Hive.box<AccountsCategoryModel>(
+      widget.categoriesBottomSheetType == CategoriesBottomSheetType.payType
+          ? Constants.paymentTypes
+          : widget.accountsEnum == AccountsEnum.expense
+              ? Constants.categoriesExpenses
+              : Constants.categoriesIncomes,
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -78,13 +92,7 @@ class _CategoriesBottomSheetState extends State<CategoriesBottomSheet> {
         ),
         Expanded(
           child: ValueListenableBuilder<Box>(
-              valueListenable: Hive.box<AccountsCategoryModel>(
-                widget.categoriesBottomSheetType == CategoriesBottomSheetType.payType
-                    ? Constants.paymentTypes
-                    : widget.accountsEnum == AccountsEnum.expense
-                        ? Constants.categoriesExpenses
-                        : Constants.categoriesIncomes,
-              ).listenable(),
+              valueListenable: box.listenable(),
               builder: (context, box, widget) {
                 return ListView.separated(
                     padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
@@ -116,13 +124,23 @@ class _CategoriesBottomSheetState extends State<CategoriesBottomSheet> {
                               Expanded(child: Text(item.title)),
                               Checkbox(
                                 value: item.isDefault,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                                 onChanged: (value) {
                                   context.read<HomeBloc>().add(
                                         this.widget.categoriesBottomSheetType == CategoriesBottomSheetType.categories
                                             ? ChangeDefaultCategory(index, this.widget.accountsEnum)
                                             : ChangeDefaultPayType(index),
                                       );
+                                  if (value == true) {
+                                    Navigator.of(context).pop(item);
+                                  }
                                 },
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  box.deleteAt(index);
+                                },
+                                icon: const Icon(Icons.delete_rounded),
                               )
                             ],
                           ),

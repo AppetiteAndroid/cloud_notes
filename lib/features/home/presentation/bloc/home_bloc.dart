@@ -8,6 +8,7 @@ import 'package:cloud_notes/core/model/ui_item.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:intl/intl.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -26,6 +27,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<AddNewPayType>(_addNewPayType);
     on<ChangeDefaultCategory>(_changeDefaultCategory);
     on<ChangeDefaultPayType>(_changeDefaultPayType);
+    on<DeleteAccount>(_deleteAccount);
   }
 
   @override
@@ -39,8 +41,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   //* AddAccount
   Future<void> _addAccountToBack(AddAccountToBack event, Emitter<HomeState> emit) async {
-    accountsBox.add(event.accounts);
-    //emit(state.copyWith(accounts: List.from(state.accounts)..insert(0, event.accounts)));
+    accountsBox.add(event.accounts.copyWith(id: accountsBox.length));
   }
 
   //* Init
@@ -54,7 +55,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void _accountsBoxListener() {
-    add(AddAccountToState(accountsBox.values.toList().reversed.toList()));
+    add(AddAccountToState(accountsBox.values.sortedBy((element) => element.date!).reversed.toList()));
   }
 
   //* AddAccountToState
@@ -100,5 +101,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     payTypesBox.values.forEachIndexed((index, element) {
       payTypesBox.putAt(index, element.copyWith(isDefault: index == event.index));
     });
+  }
+
+  //* DeleteAccount
+  Future<void> _deleteAccount(DeleteAccount event, Emitter<HomeState> emit) async {
+    accountsBox.delete(event.accounts.id);
   }
 }

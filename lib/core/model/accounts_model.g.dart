@@ -18,18 +18,19 @@ class AccountsAdapter extends TypeAdapter<Accounts> {
     };
     return Accounts(
       sum: fields[0] as double,
-      accountsType: fields[5] as AccountsEnum,
       category: fields[1] as AccountsCategoryModel?,
       payType: fields[2] as AccountsCategoryModel?,
       note: fields[3] as String?,
       date: fields[4] as DateTime?,
+      accountsType: fields[5] as AccountsEnum,
+      id: fields[6] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Accounts obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.sum)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class AccountsAdapter extends TypeAdapter<Accounts> {
       ..writeByte(4)
       ..write(obj.date)
       ..writeByte(5)
-      ..write(obj.accountsType);
+      ..write(obj.accountsType)
+      ..writeByte(6)
+      ..write(obj.id);
   }
 
   @override

@@ -1,10 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:cloud_notes/core/model/ui_item.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 
 import 'package:cloud_notes/core/model/accounts_category_model.dart';
 import 'package:cloud_notes/core/model/accounts_enum.dart';
+import 'package:cloud_notes/core/model/ui_item.dart';
 
 part 'accounts_model.g.dart';
 
@@ -22,21 +22,31 @@ class Accounts extends Equatable implements UiItem {
   final DateTime? date;
   @HiveField(5)
   final AccountsEnum accountsType;
+  @HiveField(6)
+  final int? id;
 
   const Accounts({
     required this.sum,
-    required this.accountsType,
     this.category,
     this.payType,
     this.note,
     this.date,
+    required this.accountsType,
+    this.id,
   });
 
   bool get isValid => category != null && payType != null && sum != 0;
 
   @override
   List<Object?> get props {
-    return [sum, category, payType, note, date, accountsType];
+    return [
+      sum,
+      category,
+      payType,
+      note,
+      date,
+      accountsType,
+    ];
   }
 
   Accounts copyWith({
@@ -46,6 +56,7 @@ class Accounts extends Equatable implements UiItem {
     String? note,
     DateTime? date,
     AccountsEnum? accountsType,
+    int? id,
   }) {
     return Accounts(
       sum: sum ?? this.sum,
@@ -54,6 +65,7 @@ class Accounts extends Equatable implements UiItem {
       note: note ?? this.note,
       date: date ?? this.date,
       accountsType: accountsType ?? this.accountsType,
+      id: id ?? this.id,
     );
   }
 }

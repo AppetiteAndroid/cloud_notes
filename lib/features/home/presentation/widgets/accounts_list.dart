@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:cloud_notes/core/model/accounts_model.dart';
 import 'package:cloud_notes/core/model/ui_item.dart';
@@ -11,10 +12,12 @@ import '../../../../core/model/group_title.dart';
 class AccountsList extends StatelessWidget {
   final List<UiItem> items;
   final List<Widget> widgetsBefore;
+  final Function(Accounts accounts) onItemTap;
   const AccountsList({
     Key? key,
     required this.items,
     required this.widgetsBefore,
+    required this.onItemTap,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -24,38 +27,44 @@ class AccountsList extends StatelessWidget {
         itemBuilder: (context, index) {
           var item = items[index];
           if (item is Accounts) {
-            return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              height: 60,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.circular(15),
+            return GestureDetector(
+              onTap: () => onItemTap(item),
+              behavior: HitTestBehavior.translucent,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                height: 60,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                        color: Colors.amber,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Center(
+                          child: Text(
+                        item.category?.title[0].toString().toUpperCase() ?? "",
+                        style: const TextStyle(color: Colors.white),
+                      )),
                     ),
-                    child: Center(
-                        child: Text(
-                      item.category?.title[0].toString().toUpperCase() ?? "",
-                      style: const TextStyle(color: Colors.white),
+                    const SizedBox(width: 8),
+                    Expanded(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("${item.category?.title}/${item.payType?.title}"),
+                        Text(
+                          DateFormat("dd MMM HH:mm").format(item.date!),
+                        ),
+                      ],
                     )),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(item.category?.title ?? ""),
-                      Text(item.payType?.title ?? ""),
-                    ],
-                  )),
-                  Text("${item.accountsType == AccountsEnum.expense ? '-' : '+'} ${item.sum}")
-                ],
+                    Text("${item.accountsType == AccountsEnum.expense ? '-' : '+'} ${item.sum}")
+                  ],
+                ),
               ),
             );
           } else if (item is GroupTitle) {
